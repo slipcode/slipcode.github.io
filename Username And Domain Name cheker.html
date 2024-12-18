@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username & Domain Availability Checker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            margin: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #1976d2;
+            outline: none;
+            box-shadow: 0 0 8px rgba(25, 118, 210, 0.3);
+        }
+        #results {
+            display: none;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .result-item {
+            background-color: #1976d2;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .result-item:hover {
+            background-color: #0d47a1;
+            transform: translateY(-3px);
+        }
+        p {
+            color: #616161;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            input {
+                font-size: 14px;
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            .result-item {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Availability Checker</h1>
+        <p>Enter a username or domain name to check its availability across popular platforms and domain registrars.</p>
+        <input type="text" id="inputField" oninput="handleInput()" placeholder="Enter username or domain (e.g., mywebsite)">
+        <div id="results">
+            <div id="socialResults">
+                <h2>Social Media Platforms</h2>
+                <div class="result-grid" id="socialList"></div>
+            </div>
+            <div id="domainResults">
+                <h2>Domain Name Availability</h2>
+                <div class="result-grid" id="domainList"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function handleInput() {
+            const inputField = document.getElementById('inputField');
+            const socialList = document.getElementById('socialList');
+            const domainList = document.getElementById('domainList');
+            const results = document.getElementById('results');
+
+            // Clear previous results
+            socialList.innerHTML = '';
+            domainList.innerHTML = '';
+
+            const input = inputField.value.trim();
+            if (input) {
+                results.style.display = 'block';
+
+                // Social media platforms
+                const socialPlatforms = ['YouTube', 'Facebook', 'Twitter', 'LinkedIn', 'Instagram', 'GitHub', 'GitLab'];
+                socialPlatforms.forEach(platform => {
+                    const link = document.createElement('a');
+                    link.className = 'result-item';
+                    link.href = `https://${platform.toLowerCase()}.com/${input}`;
+                    link.target = '_blank';
+                    link.textContent = `${platform}: Check availability`;
+                    socialList.appendChild(link);
+                });
+
+                // Domain TLDs
+                const tlds = ['.com', '.net', '.org', '.io'];
+                tlds.forEach(tld => {
+                    const link = document.createElement('a');
+                    link.className = 'result-item';
+                    link.href = `https://www.namecheap.com/domains/registration/results/?domain=${input}${tld}`;
+                    link.target = '_blank';
+                    link.textContent = `${input}${tld}: Check availability on Namecheap`;
+                    domainList.appendChild(link);
+                });
+            } else {
+                results.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+
